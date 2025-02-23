@@ -1,8 +1,17 @@
-import { fetchProduct } from 'src/app/services/api';
+import { fetchProduct } from '@/app/services/api';
 import { Product } from '@/types';
 import Image from 'next/image';
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
+  if (!params?.id) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h2 className="text-2xl font-semibold text-gray-800">Invalid Product</h2>
+        <p className="text-gray-600">No product ID was provided.</p>
+      </div>
+    );
+  }
+
   try {
     const product: Product | null = await fetchProduct(params.id);
 
@@ -19,15 +28,24 @@ export default async function ProductPage({ params }: { params: { id: string } }
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
           <div className="grid md:grid-cols-2 gap-8">
+            {/* Image Section */}
             <div className="relative h-96">
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                className="object-cover rounded-lg"
-                priority
-              />
+              {product.image ? (
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-cover rounded-lg"
+                  priority
+                />
+              ) : (
+                <div className="h-96 flex items-center justify-center bg-gray-200 rounded-lg">
+                  <span className="text-gray-500">No Image Available</span>
+                </div>
+              )}
             </div>
+
+            {/* Product Details Section */}
             <div>
               <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
               <p className="text-2xl text-primary mb-4">

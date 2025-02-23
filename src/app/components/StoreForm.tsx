@@ -21,32 +21,32 @@ export default function StoreForm() {
   const validateEmail = (email: string) => 
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const checkDomainAvailability = useCallback(
-    debounce(async (domain: string) => {
-      if (domain.length < 3) {
-        setDomainStatus('idle');
-        return;
-      }
-      
-      setDomainStatus('checking');
-      try {
-        const isAvailable = await checkDomain(domain);
-        setDomainStatus(isAvailable ? 'available' : 'unavailable');
-        setErrors(prev => ({ 
-          ...prev, 
-          domain: isAvailable ? '' : 'Not Available Domain, Re-enter!' 
-        }));
-      } catch (error) {
-        console.error('Domain check failed:', error);
-        setDomainStatus('idle');
-        const errorMessage = axios.isAxiosError(error) 
-          ? error.response?.data?.message || 'Domain check failed'
-          : 'Domain check failed. Please try again.';
-        setErrors(prev => ({ ...prev, domain: errorMessage }));
-      }
-    }, 500),
+  const checkDomainAvailability = debounce(async (domain: string) => {
+    if (domain.length < 3) {
+      setDomainStatus('idle');
+      return;
+    }
+  
+    setDomainStatus('checking');
+    try {
+      const isAvailable = await checkDomain(domain);
+      setDomainStatus(isAvailable ? 'available' : 'unavailable');
+      setErrors(prev => ({
+        ...prev,
+        domain: isAvailable ? '' : 'Not Available Domain, Re-enter!'
+      }));
+    } catch (error) {
+      console.error('Domain check failed:', error);
+      setDomainStatus('idle');
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.message || 'Domain check failed'
+        : 'Domain check failed. Please try again.';
+      setErrors(prev => ({ ...prev, domain: errorMessage }));
+    }
+  }, 500);
+  
     []
-  );
+  ;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

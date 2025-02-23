@@ -284,7 +284,7 @@ const StorePage = () => {
                 className={`w-full px-3 py-2 border rounded-md ${
                   errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500'
                 } focus:ring-1 focus:outline-none`}
-                placeholder="you@example.com"
+                placeholder="Enter your contact email"
                 value={formData.email}
                 onChange={(e) => {
                   setFormData({ ...formData, email: e.target.value });
@@ -306,23 +306,18 @@ const StorePage = () => {
           </div>
         </div>
 
-        {/* Submit Button and Form Error */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          {errors.form && (
-            <p className="mb-4 text-sm text-red-600 flex items-center gap-1">
-              <ExclamationCircleIcon className="h-4 w-4" />
-              {errors.form}
-            </p>
-          )}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-md transition-colors ${
-              isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            {isSubmitting ? 'Creating...' : 'Create Store'}
-          </button>
+        {/* Submit Button */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          <div className="md:col-span-1"></div>
+          <div className="md:col-span-2">
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-300"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Creating...' : 'Create Store'}
+            </button>
+          </div>
         </div>
       </form>
     </div>

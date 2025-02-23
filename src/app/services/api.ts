@@ -1,5 +1,4 @@
-// src/app/services/api.ts
-import { ApiError, Product } from '@/types';
+import { Product } from '@/types';
 import axios from 'axios';
 
 const API_BASE = 'https://interview-task-green.vercel.app/task';
@@ -22,11 +21,11 @@ export const checkDomain = async (subdomain: string): Promise<boolean> => {
     return response.data.available;
   } catch (error) {
     console.error('Domain check failed:', error);
-    return false;
+    return false;  // Consider throwing an error here if you need more detailed handling
   }
 };
 
-export const createStore = async (storeData: StoreFormData) => {
+export const createStore = async (storeData: StoreFormData): Promise<any> => {
   try {
     const response = await axios.post(
       `${API_BASE}/stores/create`,
@@ -44,11 +43,11 @@ export const createStore = async (storeData: StoreFormData) => {
   } catch (error) {
     console.error('Store creation failed:', error);
     if (axios.isAxiosError(error)) {
-      throw new Error(
+      const message =
         error.response?.data?.message || 
         error.response?.data?.error?.message || 
-        'Store creation failed'
-      );
+        'Store creation failed';
+      throw new Error(message);  // You can throw a more detailed error message
     }
     throw new Error('Unknown error occurred');
   }
